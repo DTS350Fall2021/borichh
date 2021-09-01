@@ -1,0 +1,67 @@
+---
+title: "Task 2"
+author: "Haleigh Borich"
+date: "9/1/2021"
+output:
+  word_document: default
+  html_document:
+    theme: united
+    keep_md: yes
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("knitr")
+```
+
+```{r}
+sin(pi / 4)
+# The answer to this equation is 0.7071068
+x <- (10 / 3)
+x
+# Code names that are allowed include any word that starts with a letter only containing letters and number along with _ and . 
+# Code names that are not allowed include anything that starts with a number or has "" quotation marks around it.
+MySequence <- seq(1, 50, length.out = 7)
+MySequence
+# this code will print 7 equally spaced out numbers from 1 to 50
+my_vector <- c(1, 5, 12, 31, 19)
+my_vector
+# A vector is just a combination of numbers that are concatenated
+7 + 5 == 12
+# When using "==" this means "is equal to" which is why we received a "TRUE" statement when running the code
+(7 + 4 = 12) | (5 - 4 = 1)
+# The language this problems uses is not understood since it uses the wrong boolean statement. Instead of a single "=" you need to add two. To fix this issue, we add in two equal signs in each of the equations. 
+# The "|" in this equations stands for "or" meaning it will return the value "TRUE" when ran properly
+(7 + 4 == 12) | (5 - 4 == 1)
+# Exercises 1 - 3
+
+# 1
+# This code does not work because the second line differs from the first line
+
+# 2 
+library(tidyverse)
+
+ggplot(dota = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+fliter(mpg, cyl = 8)
+filter(diamond, carat > 3)
+
+# dota needs to be changed to data along with fliter needs to become filter. The equal sign also needs to be doubled and "diamond" needs an S at the end 
+
+library(tidyverse)
+
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+filter(mpg, cyl == 8)
+filter(diamonds, carat > 3)
+
+# Exercise 3 
+# The keyboard shortcut quick reference pops up. This can also be found by navigating through tool -> keyboard shortcuts help
+```
+
