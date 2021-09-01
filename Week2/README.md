@@ -1,1 +1,1 @@
- 
+ Hi my name is Haleigh Borich. I am 20 years old and I am studying Data Science at William Jewell College
