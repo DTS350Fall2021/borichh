@@ -33,4 +33,11 @@ iris_size <- iris_data %>%
 iris_size
 
 iris_rank <- arrange(iris_data, desc(Petal.Length))
-iris_rank                     
+iris_rank     
+
+?summarise_all()
+
+MeanForAll <- iris_data %>% group_by(Species) %>% summarize_all(list(Mean = mean, Std_Dev = sd))
+
+MeanForAll
+
