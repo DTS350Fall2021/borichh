@@ -1,0 +1,120 @@
+---
+title: "Task 5 Markdown"
+author: "Haleigh Borich"
+date: "9/9/2021"
+output:
+  html_document:
+      code_folding: "hide"
+      keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(downloader)
+library(readxl)
+```
+
+```{r}
+SoloData <- read.csv("solo-artist-followers.csv")
+head(SoloData)
+tail(SoloData)
+view(SoloData)
+str(SoloData)
+```
+It looks as though the data did trasnfer over correctly
+```{r}
+BillboardData <- read.csv("billboard-hits.csv")
+head(BillboardData)
+tail(BillboardData)
+view(BillboardData)
+str(BillboardData)
+```
+It looks as though the data did not trasnfer over correctly. 
+```{r}
+BillboardData <- read_csv(
+  ("billboard-hits.csv"),
+  col_types = cols(
+    peak_date = col_date()
+  )
+)
+
+str(BillboardData)
+
+```
+The data is now correct for the Billbaord Data
+
+```{r}
+SixHits <- BillboardData %>%
+  group_by(name) %>%
+  filter(n() > 6 & band != "")
+view(SixHits)
+```
+
+```{r}
+BandHits <- BillboardData %>%
+  group_by(band) %>%
+  filter(name %in% SixHits$band)
+view(BandHits)
+```
+
+```{r}
+BandHits <- rename(BandHits, name = band, band = name)
+```
+
+
+```{r}
+ggplot(data = SixHits, aes(x = peak_date, y = peak_rank, color = name, group = name)) +
+  geom_point() +
+  geom_line() +
+  geom_point(data = BandHits, color = "black") +
+  geom_line(data = BandHits, color = "black", linetype = "dashed") +
+  facet_wrap(~band, scales = "free") +
+  theme_bw()
+```
+
+Part 2
+Here is what we know about Race and Killings By Police
+https://www.buzzfeednews.com/article/peteraldhous/race-and-police-shootings 
+```{r}
+PoliceData <- tibble(read_csv("fatal-police-shootings-data.csv"))
+str(PoliceData)
+```
+a. It looks as though all of the data transferred over correctly.
+b. Some information about this dataset: It comes from Washington Post and has a compilation of information on people shot by police in the year 2015. It includes their race and whether or not they were armed. 
+
+The Counted
+https://www.theguardian.com/us-news/ng-interactive/2015/jun/01/about-the-counted 
+```{r}
+CountedData <- tibble(read_csv("the-counted-2015.csv"))
+str(CountedData)
+```
+a. It looks as though everything transferred over correctly.
+b. Some information about this dataset: It comes from The Guardian and it includes information about people killed by police and other law enforcement agencies in the United States throughout the year 2015. This data is used to combat the lack of basic data in police agencies. 
+
+National Instant Criminal Background Check System (NICS)
+https://www.fbi.gov/services/cjis/nics 
+```{r}
+NICSdata <- tibble(read_csv("nics-firearm-background-checks.csv"))
+str(NICSdata)
+
+NICSdata <- read_csv(
+  "nics-firearm-background-checks.csv")
+  col_types = cols()
+
+
+
+```
+
+
+Injury Statistics
+https://www.stats.govt.nz/large-datasets/csv-files-for-download/
+```{r}
+InjuryData <- tibble(read_csv("injury-statistics-work-related-claims-2018-csv.csv"))
+str(InjuryData)
+```
+a. It looks as though everything transferred over correctly.
+b. Some information about this dataset: it includes information about where the injury occured, the age of the person, and what occured after the injury. 
