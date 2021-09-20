@@ -1,0 +1,54 @@
+---
+title: "Case Study 4"
+author: "Haleigh Borich"
+date: "9/20/2021"
+output:
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+
+---
+
+Load Data 
+```{r}
+library(nycflights13)
+library(tidyverse)
+library(ggrepel)
+```
+Look at Flights Data & Structure
+```{r}
+?flights
+str(flights)
+head(flights)
+```
+1. f I am leaving before noon, which two airlines do you recommend at each airport (JFK, LGA, EWR) that will havethe lowest delay time at the 75th percentile?
+```{r}
+LowDelay <- ggplot(data = flights, mapping = aes(x = carrier, y = arr_delay, color = carrier, size = arr_delay)) +
+  geom_point() +
+  labs(x = "Airline Carrier",
+       y = "Arrival Delay",
+       title = "If I am leaving before noon, which two airlines 
+       do you recommend at each airport (JFK, LGA, EWR) that 
+       will havet he lowest delay time at the 75th percentile?",
+       subtitle = "SkyWest Airlines Inc. is the best carrier ",
+       caption = "We can see that SkyWest Airlines Inc. is the 
+       best for a flight because it has the lowest Arrival Delays")
+LowDelay
+```
+From this graph, I was able to tell that SkyWest Arilines Inc. was the best carrier to go through because it had the least amount of points
+
+Which destination airport is the worst airport for 
+arrival time?
+```{r}
+WorstAirline <- ggplot(data = flights, mapping = aes(x = origin, y = arr_delay, color = origin, size = arr_delay)) +
+  geom_point() +
+  labs(x = "Origin Airport", 
+       y = "Arrival Delay",
+       title = "Which destination airport is the worst airport for arrival time?",
+       subtitle = "JFK is the worst location to fly out of",
+       caption = "We know this because it has a high density of points") +
+  theme_bw()
+WorstAirline
+```
+The worst airline is JFK because, and I was able to figure that out because it has the most points laying towards the top of the graph, meaning it has the most late arrivals. 
