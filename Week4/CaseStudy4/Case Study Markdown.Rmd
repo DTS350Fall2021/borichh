@@ -23,20 +23,58 @@ str(flights)
 head(flights)
 ```
 1. f I am leaving before noon, which two airlines do you recommend at each airport (JFK, LGA, EWR) that will havethe lowest delay time at the 75th percentile?
+
+Filter the dataset so that the new data only has EWR
 ```{r}
-LowDelay <- ggplot(data = flights, mapping = aes(x = carrier, y = arr_delay, color = carrier, size = arr_delay)) +
-  geom_point() +
-  labs(x = "Airline Carrier",
-       y = "Arrival Delay",
-       title = "If I am leaving before noon, which two airlines 
-       do you recommend at each airport (JFK, LGA, EWR) that 
-       will havet he lowest delay time at the 75th percentile?",
-       subtitle = "SkyWest Airlines Inc. is the best carrier ",
-       caption = "We can see that SkyWest Airlines Inc. is the 
-       best for a flight because it has the lowest Arrival Delays")
-LowDelay
+EWRdata <- filter(flights, origin == "EWR")
+head(EWRdata)
 ```
-From this graph, I was able to tell that SkyWest Arilines Inc. was the best carrier to go through because it had the least amount of points
+Create a Graph
+```{r}
+EWRplot <- ggplot(data = EWRdata, mapping = aes(x = carrier, y = arr_delay, size = arr_delay, color = carrier)) +
+  geom_point()+
+  labs(x = "Carriers",
+       y = "Arrival Delay",
+       title = "Which two airlines have the lowest arrival delay in EWK airport?",
+       subtitle = "Skywest Arilines INc. & Alaska Airlines Inc. have the lowest arrival delay") +
+  theme_bw()
+
+EWRplot
+```
+Filter the dataset so that the new data only has JFK
+```{r}
+JFKdata <- filter(flights, origin == "JFK")
+head(JFKdata)
+```
+Create a Graph
+```{r}
+JFKplot <- ggplot(data = JFKdata, mapping = aes(x = carrier, y = arr_delay, size = arr_delay, color = carrier)) +
+  geom_point() +
+  labs(x = "Carriers",
+       y = "Arrival Delay",
+       title = "Whuich two airlines have the lowest Arrival Delay in JFK airport?",
+       subtitle = "Hawaiian Arilines Inc. & US Airways Inc. have the lowest arrival delay") +
+  theme_bw()
+
+JFKplot
+```
+Filter the dataset so that the new data only has LGA
+```{r}
+LGAdata <- filter(flights, origin == "LGA")
+head(LGAdata)
+```
+Create a Graph
+```{r}
+LGAplot <- ggplot(data = LGAdata, mapping = aes(x = carrier, y = arr_delay, size = arr_delay, color = carrier)) +
+  geom_point() +
+  labs(x = "Carriers",
+       y = "Arrival Delays",
+       title = "Which two airlines have the lowest Arrival Delay in LGA airport?",
+       subtitle = "Skyest Airlines Inc. & Endeavor Air Inc. have the lowest arrival delay") +
+  theme_bw()
+
+LGAplot
+```
 
 Which destination airport is the worst airport for 
 arrival time?
