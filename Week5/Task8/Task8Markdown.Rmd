@@ -1,0 +1,90 @@
+---
+title: "Task8Markdown"
+author: "Haleigh Borich"
+date: "9/22/2021"
+output: 
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+Load in libraries
+```{r }
+library(tidyverse)
+```
+I needed to set my working directory so first I found it and then reset it
+```{r}
+getwd()
+#setwd("/Users/haleighborich/DTS 350/borichh/Week5/Task8")
+# I marked this part out that way you do not accidentally run it.
+```
+Load in Data set
+```{r}
+BSLData <- read_csv("heights.csv")
+```
+Look at the firs & last 6 rows and structure
+```{r}
+head(BSLData)
+tail(BSLData)
+str(BSLData)
+```
+Create a new column named grade were the grade is specified with a word instead of a number
+```{r}
+HeightEd <- BSLData %>%
+  mutate(grade = 
+           case_when(
+             ed >= 3 & ed <= 6 ~ "primary",
+             ed >= 7 & ed <=11 ~ "secondary",
+             ed == 12 ~ "highschoolgrad",
+             ed >= 13 & ed <=15 ~ "associate",
+             ed == 16 ~ "bachelors",
+             ed >= 17 & ed <= 18 ~ "masterdoctorate"
+           ))
+```
+Create a grpahic for the relationship between Race & Education
+```{r}
+HeightEd %>%
+  mutate(grade = as.factor(fct_reorder(grade, earn))) %>%
+  ggplot(aes(x = race, y = earn, fill = race)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~ grade, nrow = 1) +
+  labs(x = "Race", 
+       y = "Earnings",
+       title = "Relationship between Race & Education",
+       subtitle = "We can assume that the more you earn, the better education
+       you recieved.") +
+  theme_bw()
+```
+Create a graphic for the relationship between Sex/Gender & Educaiton
+```{r}
+HeightEd %>%
+  mutate(grade = as.factor(fct_reorder(grade, earn))) %>%
+  ggplot(aes(x = sex, y = earn, fill = sex)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~ grade, nrow = 1) +
+  labs(x = "Sex/Gender", 
+       y = "Earnings",
+       title = "Relationship between Sex & Education",
+       subtitle = "We can assume that earnings increase due to the education recieved.")
+  theme_bw()
+```
+Create a graphic to compare earnings through Race & Gender
+```{r}
+HeightEd %>%
+  mutate(race = fct_lump(race)) %>%
+  ggplot(aes(x = sex, y = earn, fill = sex)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~ race, nrow = 1) +
+  labs(x = "Sex/Gender",
+       y = "Earnings",
+       title = "Comparing Earnings through Race & Gender",
+       subtitle = "Other consists of African Americans, Hispanics, and the Original Other",
+       captions = "While making this graph, I learned the importance of lumping data together.
+       I had orignally created a grpah showing the difference between all of the races, but 
+       I thought it would be more useful to show how White people have a severe advantage when
+       it comes to salary. From this graph, we can see that White people have close to triple 
+       the amount of earning than any other race.") +
+  theme_bw()
+```
+
+
