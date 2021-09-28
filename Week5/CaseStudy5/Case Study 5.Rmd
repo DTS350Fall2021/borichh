@@ -1,0 +1,100 @@
+---
+title: "Case Study 5"
+author: "Haleigh Borich"
+date: "9/27/2021"
+output: 
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+
+Load in the Libraries
+```{r}
+library(tidyverse)
+library(downloader)
+library(readxl)
+```
+Read in Data
+```{r}
+GunData <- tempfile()
+download("https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv", GunData, mode = "wb")
+GunData1 <- read_csv(GunData)
+```
+Look at the data & structure
+```{r}
+head(GunData1)
+str(GunData1)
+```
+Filter out the N/A value
+```{r}
+NewGunData <- GunData1 %>%
+  filter(age != "", intent != "")
+```
+Create a new column named "Age Group"
+```{r}
+agegroup <- NewGunData %>%
+  mutate(agegroup =
+           case_when(
+             age >= 0 & age <= 14 ~ "under 15.",
+             age >= 15 & age <= 34 ~ "15 - 34",
+             age >= 35 & age <= 64 ~ "35 - 64",
+             age >= 65 ~ "65+"), 
+         agegroup = fct_relevel(agegroup,
+                                "under 15.", "15 - 34", "35 - 64", "65+")
+         )
+```
+Create a Graph for the data
+```{r}
+ggplot(data = agegroup, mapping = aes(x = agegroup, fill = sex)) +
+  geom_bar() +
+  facet_wrap(~ intent, nrow = 2, scales = "free") +
+  scale_fill_manual(values = c("#D784B4", "#5A84D3")) +
+  theme_bw() +
+  labs(title = "Different types of Gun Deaths through Age Groups")
+```
+The second visualization does not require preparation like the first graphic.
+Create a Graph
+```{r}
+ggplot(data = NewGunData, mapping = aes(x = age, fill = intent)) +
+  geom_density(alpha = .6, position = "fill") +
+  facet_wrap(~ sex) +
+  scale_fill_manual(values = c("#8CDBAA","#FFA727","#B2C2F8","#F9A5E4")) +
+  labs(title = "Gun Deaths through the Genders")
+```
+Create a New Column named "Seasons"
+```{r}
+seasons <- NewGunData %>%
+  mutate(month = as.factor(month))
+```
+Make the column "Month" an Integer
+```{r}
+NewGunData$month <- as.integer(NewGunData$month)
+```
+Create the seasons within the new column
+```{r}
+seasons <- NewGunData %>%
+  mutate(season =
+           case_when(
+             month >= 3 & month <= 5 ~ "Spring",
+             month >= 6 & month <= 8 ~ "Summer",
+             month >= 9 & month <= 11 ~ "Fall",
+             month >= 1 & month <= 2 ~ "Winter",
+             month == 12 ~ "Winter"))
+```
+Graphic #1
+```{r}
+ggplot(data = seasons, mapping = aes(x = season, fill = season)) +
+  geom_bar() +
+  theme_bw()
+```
+In this graph, I plotted the different seasons and the count of deaths per season. The reason this graph is important is because it shows that season does not make a difference in Gun Deaths.
+
+Graphic #2
+```{r}
+ggplot(data = seasons, mapping = aes(x = season, fill = season)) +
+  geom_bar() +
+  facet_wrap(~ intent, nrow = 2, scales = "free") +
+  theme_bw()
+```
+I created this graph because I wanted to see the different types of deaths throughout the seasons. From this we can assume that the season does not have an effect of the type of deaths.
