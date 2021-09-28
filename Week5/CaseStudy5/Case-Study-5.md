@@ -127,12 +127,12 @@ Create a new column named "Age Group"
 agegroup <- NewGunData %>%
   mutate(agegroup =
            case_when(
-             age >= 0 & age <= 14 ~ "under 15.",
+             age >= 0 & age <= 14 ~ "under 15",
              age >= 15 & age <= 34 ~ "15 - 34",
              age >= 35 & age <= 64 ~ "35 - 64",
              age >= 65 ~ "65+"), 
          agegroup = fct_relevel(agegroup,
-                                "under 15.", "15 - 34", "35 - 64", "65+")
+                                "under 15", "15 - 34", "35 - 64", "65+")
          )
 ```
 Create a Graph for the data
@@ -191,7 +191,7 @@ ggplot(data = seasons, mapping = aes(x = season, fill = season)) +
 ```
 
 ![](Case-Study-5_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
-In this graph, I plotted the different seasons and the count of deaths per season. The reason this graph is important is because it shows that season does not make a difference in Gun Deaths.
+In this graph, I plotted the different seasons and the count of deaths per season. The reason this graph is important is because it shows that season does not make a difference in Gun Deaths.However, it is worth nothing that Summer does have the most gun deaths in its variable. 
 
 Graphic #2
 
@@ -203,4 +203,4 @@ ggplot(data = seasons, mapping = aes(x = season, fill = season)) +
 ```
 
 ![](Case-Study-5_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
-I created this graph because I wanted to see the different types of deaths throughout the seasons. From this we can assume that the season does not have an effect of the type of deaths.
+I created this graph because I wanted to see the different types of deaths throughout the seasons. From this we can assume that the season does not have an effect of the type of deaths. However, there is an alarming amount of suicide gun deaths which is very concerning. 
