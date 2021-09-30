@@ -1,0 +1,70 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+Load in Libraries
+```{r}
+library(tidyverse)
+library(RColorBrewer)
+library(viridis)
+library(plotly)
+```
+Create Graph #1
+```{r}
+ggplot(data = ToothGrowth, mapping = aes(x = len, y = dose, fill = dose, group = dose)) +
+  geom_boxplot() +
+  facet_wrap(~ supp, nrow = 1) +
+  coord_flip() +
+  labs(x = "Length",
+       y = "Type of Supplements",
+       title = "The Two Different Types of Supplements compared \nto the varying lengths",
+       subtitle = "The graph compares the two types of supplements with length for \nteeth. It will be useful for the company because you can see that VC \nhas a higher growth length while OJ has a more consistant growth length \nfor the lower doses",
+       caption = "I chose a box plot that way it is possible to seee \nthe growth from each dose of supplement. It was easier \nto see the difference between supplements as well") +
+  theme_bw()
+```
+Create Graph #2
+```{r}
+ggplot(data = ToothGrowth, mapping = aes(x = len, fill = supp)) +
+  stat_bin(breaks = seq(0, 35, 3), alpha = .9) +
+  scale_fill_manual(values = c("#B44848", "#5A3C66")) +
+  facet_wrap(~ supp) +
+  labs(x = "Length of Tooth Growth",
+       y = "Count",
+       title = "Comparing the Two Supplements and Length Growth",
+       subtitle = "This Graph informative to the company because it is easy to compare the two \nsupplements. As you can see, the OJ Supplement has a larger tooth growth \nthan the VC Supplement. While the VC has more consistant growth levels, \nOJ has a higer percentage of larger tooth growth",
+       caption = "I chose a histogram for this graph because I beleived it would be the easiest \nto compare the two supplememnts along with the length of tooth growth.") +
+  theme_bw()
+```
+Create Graph #3
+```{r}
+irisplot <- ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species, text = Species)) +
+  geom_point() +
+  scale_color_viridis(discrete = TRUE) +
+  theme_bw() +
+  labs(x = "Sepal Length (cm)",
+       y = "Sepal Width (cm)",
+       title = "Sepal Length and Sepal Width",
+       subtitle = "This graph would be the best to show the company because the data \nis easily understood in this format. We can see that the species Setosa has \nthe largest Sepal Width but has the smalled Sepal Length. However, \nthe species Virginica is the largest overall",
+       caption = "I chose a scatterplot for this graph because I beleived it would be \nthe easiest way to understand the data. If we were looking to see which \nflower would have the largest overall width and length, it would be \nharder to see but after looking at the graph, we can understand \nwhich species of iris' are the smallest and largest.")
+ggplotly(irisplot, tooltip = "text")
+```
+Create Graph #4
+```{r}
+mpgdat <- ggplot(data = mpg, mapping = aes(x = hwy, fill = class, text = class)) +
+  geom_density() +
+  facet_wrap(~ class, nrow = 1) +
+  scale_fill_brewer(palette = "Spectral") +
+  labs(x = "Miles per Gallon (hwy)",
+       y = " ",
+       title = "Comparing Class to see which type of vehical has \nthe best mpg on the Highway",
+       subtitle = "I found this graph to be the most useful to show a company because we \ncan see the range of each class while seeing where the highest density is \nin the class. While the Two Seater class has the highest overall density, it is \nin between the 20 - 30 range. While Subcompact is more consistant within \nthe vehicle types, it still doesnt have the best MPG. I would say the \nCompact would be the best option because it has the highest density \ntowards the higher range of the MPG.",
+       caption = "I chose a density graph because I beleived it would give the best \nresults with the least amount of time trying to understand the data.") +
+  theme_bw()
+
+ggplotly(mpgdat, tooltip = "text")
+```
+
