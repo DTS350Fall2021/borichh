@@ -1,0 +1,71 @@
+---
+title: "Task12"
+author: "Haleigh Borich"
+date: "10/5/2021"
+output: 
+   html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+
+```{r}
+library(tidyverse)
+library(downloader)
+library(readxl)
+library(plotly)
+```
+
+```{r}
+MData <- tempfile()
+download("https://raw.githubusercontent.com/fivethirtyeight/data/master/fandango/fandango_score_comparison.csv", MData, mode = "wb")
+MovieData <- read_csv(MData)
+```
+
+```{r}
+str(MovieData)
+head(MovieData)
+tail(MovieData)
+```
+
+```{r}
+NewData <- MovieData %>%
+  select(FILM, RT_norm, Metacritic_norm, IMDB_norm, Fandango_Ratingvalue) %>%
+  pivot_longer(2:5, names_to = "websites", values_to = "ratings") %>%
+  select(FILM, websites, ratings)
+```
+
+```{r}
+view(NewData)
+```
+
+```{r}
+f20_ratings <- head(NewData, n = 20)
+view(f20_ratings)
+```
+
+```{r}
+ggplot(f20_ratings, aes(x = ratings, y = websites, color = FILM)) +
+  geom_point() +
+  theme_bw()
+```
+```{r}
+moviegraph <- ggplot(f20_ratings, aes(x = websites, y = ratings, fill = websites, text = websites)) +
+  geom_col(position = "dodge") +
+  facet_wrap(~ FILM, nrow = 1) +
+  scale_fill_discrete(name = "Websites", labels = c("Fandango", "IMDB", "Metracritic", "Rotton Tomatoes")) +
+  scale_x_discrete(name = "Type of Websites", labels = c(" ", " ", " ", " ")) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(x = "Type of Websites",
+       y = "Ratings",
+       title = "Comparing Different Movie Ranking Sites",
+       caption = "I used a Column graph with a facet wrap seperating the different types of movies. \nI did those so the user would be able to make direct comparisons within the movie ratings itself. \nFrom this graph, we can see that Fandago has the highest rankings for each movie, followed by IMDB. \nMetacritic and Rotton Tomatos switch between each movie.") +
+  theme_bw()
+
+ggplotly(moviegraph, tooltip = "text")
+```
+```{r}
+
+```
+
+
