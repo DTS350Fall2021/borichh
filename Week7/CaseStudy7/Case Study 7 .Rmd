@@ -1,0 +1,144 @@
+---
+title: "Case Study 6"
+author: "Haleigh Borich"
+date: "10/11/2021"
+output:   
+   html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+
+```{r}
+library(readr)
+library(haven)
+library(readxl)
+library(tidyverse)
+library(downloader)
+library(haven)
+library(foreign)
+```
+
+```{r}
+bob1 <- tempfile()
+download("https://github.com/WJC-Data-Science/DTS350/raw/master/Height.xlsx", bob1, mode = "wb")
+Data1 <- read_xlsx(bob1, skip = 2)
+
+bob2 <- tempfile()
+download("https://github.com/WJC-Data-Science/DTS350/raw/master/germanconscr.dta", bob2, mode = "wb")
+Data2 <- read_dta(bob2)
+head(Data2)
+
+bob3 <- tempfile()
+download("https://github.com/WJC-Data-Science/DTS350/raw/master/germanprison.dta", bob3, mode = "wb")
+Data3 <- read_dta(bob3)
+head(Data3)
+
+bob4 <- tempfile()
+download("https://github.com/WJC-Data-Science/DTS350/raw/master/Heights_south-east/B6090.DBF", bob4, mode = "wb")
+Data4 <- read.dbf(bob4, as.is = FALSE)
+head(Data4)
+
+Data4 <- tibble(Data4)
+
+bob5 <- tempfile()
+download("https://raw.githubusercontent.com/hadley/r4ds/master/data/heights.csv", bob5, mode = "wb")
+Data5 <- read_csv(bob5)
+head(Data5)
+
+bob6 <- tempfile()
+download("http://www.ssc.wisc.edu/nsfh/wave3/NSFH3%20Apr%202005%20release/main05022005.sav", bob6, mode = "wb")
+Data6 <- read_sav(bob6)
+head(Data6)
+
+```
+
+```{r}
+worlddata <- Data1 %>%
+  pivot_longer(3:203, names_to = "years", values_to = "heights.cm", values_drop_na = TRUE) %>%
+  mutate(year_decade = years, 
+         height.in = heights.cm/2.54) %>%
+  separate(years, into = c("century", "decade"), sep = -2) %>%
+  separate(decade, into = c("decade", "year"), sep = -1) 
+
+
+```
+
+```{r}
+one <- Data2 %>%
+  mutate(birth_year = bdec, 
+         height.cm = height, 
+         height.in = height.cm/2.54,
+         study_id = "Data1") %>%
+  select(birth_year, height.cm, height.in, study_id)
+```
+
+```{r}
+two <- Data3 %>%
+  mutate(birth_year = bdec,
+         height.cm = height,
+         height.in = height.cm/ 2.54,
+         study_id = "Data 2") %>%
+  select(birth_year, height.in, height.cm, study_id)
+```
+
+```{r}
+three <-  Data4 %>%
+  mutate(height.in = CMETER/2.54,
+         height.cm = CMETER,
+         birth_year = SJ,
+         study_id = "Data 3") %>%
+  select(height.in, height.cm, birth_year, study_id)
+```
+
+```{r}
+four <- Data5 %>%
+  mutate(birth_year = 1950,
+         height.in = height,
+         height.cm = height.in*2.54,
+         study_id = "Data 4") %>%
+  select(birth_year, height.cm, height.in, study_id)
+```
+
+```{r}
+five <- Data6 %>%
+  mutate(birth_year = DOBY + 1900,
+         height.in = RT216F * 12 + RT216I,
+         height.cm = height.in*2.54,
+         study_id = "Data 5") %>%
+  select(birth_year, height.in, height.cm, study_id)
+```
+
+```{r}
+total <- bind_rows(one, two, three, four, five)
+head(total)
+```
+
+```{r}
+germdata <- worlddata %>%
+  filter(`Continent, Region, Country` == "Germany")
+head(germdata)
+```
+
+```{r}
+ggplot(worlddata, aes(x = year_decade, y = height.in)) +
+  geom_point() +
+  geom_point(data = germdata, color = "blue") +
+  labs(x = "Decade",
+       y = "Height in Inches",
+       title = "Comparing Germany among the Countries in growth") +
+  theme_bw()
+```
+In this graph, we can see the different growth rates for each country. I highlighted the country Germany that way we can see the different growth rate for on specific country. From the overall graph, we can see that there is a height change as the years go on. From the highlighted points in this specific graph, we can confirm our last assumption of height is changing throughout the decades. 
+
+```{r}
+ggplot(total, aes(x = birth_year, y = height.in, fill = study_id)) +
+  geom_col() +
+  facet_wrap(~ study_id, scales = "free") +
+  theme_bw() +
+  labs(x = "Birth Year",
+       y = "Count",
+       title = "Comparing different Datasets and How they see the relationship between growth")
+```
+
+In this graph, I am comparing growth through the years from the 5 different data sets we have created. I had the previous idea that growth was increasing throughout the years but because of this graph, we cannot confirm this hypothesis. Growth is changing, but it is not consistent enough to make a decision of what it is exactly doing.
