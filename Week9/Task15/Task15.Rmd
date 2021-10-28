@@ -1,0 +1,71 @@
+---
+title: "Task 15"
+author: "Haleigh Borich"
+date: "10/21/2021"
+output: 
+   html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+
+```{r}
+library(tidyverse)
+library(downloader)
+library(readr)
+```
+
+
+```{r}
+bob <- tempfile()
+download("https://raw.githubusercontent.com/WJC-Data-Science/DTS350/master/bible.csv", bob, mode = "wb")
+Data1 <- read_csv(bob)
+head(Data1)
+str(Data1)
+```
+
+```{r}
+OldTest <- Data1 %>%
+  filter(volume_long_title == "The Old Testament") %>%
+  select(scripture_text)
+head(OldTest)
+
+NewTest <- Data1 %>%
+  filter(volume_long_title == "The New Testament") %>%
+  select(scripture_text)
+head(NewTest)
+```
+
+```{r}
+verse_length <- function(df) {
+  vlength <- vector("integer", 0)
+  for(row in df) {
+    vlength <- append(vlength, str_length(row))
+  }
+  vlength
+}
+```
+
+```{r}
+mean(verse_length(OldTest))
+mean(verse_length(NewTest))
+```
+
+```{r}
+str_length(str_extract_all(OldTest, "(?i)lord"))
+str_length(str_extract_all(NewTest, "(?i)lord"))
+```
+
+```{r}
+as.data.frame(verse_length(NewTest)) %>%
+  ggplot(aes(x = verse_length(NewTest))) +
+  geom_histogram(color = "black", fill = "grey") +
+  theme_bw() +
+  labs(x = "Verse Length in New Testament",
+       y = "Count of words",
+       title = "Word Count Distribution by Verse in New Testament")
+```
+
+The average ver length in the Old Testament compared to the New Testament is fairly similar. The Old Testament has a larger average with 136 words in each verse while the New Testament has an average of 118 words in each verse. While looking at how often the word LORD is used in the Old Testament and New Testament, we get very different answers. The Old Testament was 58,300 mentions of LORD while The New Testament has 5,900 mentions of the LORD. As you can see, the New Testament does not have nearly as many mentions of the LORD. I believe this is because throughout the New Testament, there were other names instead of LORD used to describe Christ.
+
+In the histogram I made, you can see that the verses that are around the length of 120 - 130 words per verse happen the most in the New Testament. Verses that have less than 50 words and over 200 words don't occur frequently. Majority of the verses fall in the 70 through the 170 mark.
