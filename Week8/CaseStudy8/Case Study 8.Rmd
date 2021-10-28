@@ -1,0 +1,111 @@
+---
+title: "Case Study 8"
+author: "Haleigh Borich"
+date: "10/26/2021"
+output:  
+   html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+
+```{r}
+library(qdapRegex)
+library(tidyverse)
+library(downloader)
+library(readr)
+library(stringi)
+```
+
+
+```{r}
+bob1 <- tempfile()
+download("https://raw.githubusercontent.com/WJC-Data-Science/DTS350/master/bible.csv", bob1, mode = "wb")
+ScriptData <- read_csv(bob1)
+head(ScriptData)
+```
+
+```{r}
+bob2 <- tempfile()
+download("https://raw.githubusercontent.com/WJC-Data-Science/DTS350/master/Names.csv", bob2, mode = "wb")
+NameData <- read_csv(bob2)
+head(NameData)
+```
+
+```{r}
+OldTest <- ScriptData %>%
+  filter(volume_long_title == "The Old Testament") %>%
+  select(scripture_text) %>%
+  str_c()
+```
+
+```{r}
+NewTest <- ScriptData %>%
+  filter(volume_long_title == "The New Testament") %>%
+  select(scripture_text) %>%
+  str_c()
+```
+
+```{r}
+Savior_Name <- NameData %>%
+  select(name)
+head(Savior_Name) 
+```
+
+```{r}
+str_detect(OldTest, "abcxyz")
+str_detect(NewTest, "abcxyz")
+```
+
+```{r}
+Savior_Ref <- function(df) {
+  count <- vector("integer", ncol(Savior_Name))
+  for (name in Savior_Name) {
+    count <- count + str_length(str_extract_all(df, name))
+  }
+  sum(count)
+}
+```
+
+```{r}
+Savior_Ref(OldTest)
+```
+
+```{r}
+Savior_Ref(NewTest)
+```
+
+```{r}
+Between_Words <- function(df, test) {
+  for (names in Savior_Name$name) {
+    Replace <- str_replace_all(df, names, "abcxyz")
+  }
+  Split_Words <- str_split(Replace, "abcxyz")
+  Split_Words_N <- str_remove_all(Split_Words, "\n")
+  if (test == "mean") {
+    stri_stats_latex(unlist(Split_Words_N))[[4]]/length(unlist(Split_Words))
+  } else {
+    stri_stats_latex(unlist(Split_Words_N)) [[4]]
+  }
+}
+``` 
+
+```{r}
+Between_Words(OldTest, "between")
+```
+
+```{r}
+Between_Words(NewTest, "between")
+```
+
+```{r}
+Between_Words(OldTest, "mean")
+```
+```{r}
+Between_Words(NewTest, "mean")
+```
+
+```{r}
+
+```
+
