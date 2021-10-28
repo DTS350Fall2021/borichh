@@ -41,7 +41,6 @@ library(stringi)
 ```
 
 
-
 ```r
 bob1 <- tempfile()
 download("https://raw.githubusercontent.com/WJC-Data-Science/DTS350/master/bible.csv", bob1, mode = "wb")
@@ -215,7 +214,7 @@ Savior_Ref(OldTest)
 ```
 ## [1] 33187
 ```
-
+33,187
 
 ```r
 Savior_Ref(NewTest)
@@ -228,7 +227,7 @@ Savior_Ref(NewTest)
 ```
 ## [1] 44280
 ```
-
+44,280
 
 ```r
 Between_Words <- function(df, test) {
@@ -258,7 +257,7 @@ Between_Words(OldTest, "between")
 ```
 ## [1] 611503
 ```
-
+611,503
 
 ```r
 Between_Words(NewTest, "between")
@@ -272,7 +271,7 @@ Between_Words(NewTest, "between")
 ```
 ## [1] 180662
 ```
-
+180,662
 
 ```r
 Between_Words(OldTest, "mean")
@@ -286,6 +285,7 @@ Between_Words(OldTest, "mean")
 ```
 ## [1] 3135.913
 ```
+3,135.913
 
 ```r
 Between_Words(NewTest, "mean")
@@ -299,6 +299,7 @@ Between_Words(NewTest, "mean")
 ```
 ## [1] 12044.13
 ```
+12,044.13
 
-
-
+After doing extensive research, I was able to figure out that the New Testament has more references to a Savior name than the Old Testament does. The New Testament has a total of 44,280 references throughout the book while the Old Testament has a total of 33,187 mentioned of Savior references. 
+Later on, I was able to find out that the Old Testament and the New Testament have varying lengths. I was able to conclude that from finding the average of length between each savior reference. The Old Testament has, on an average, 3,135 words in between each Savior reference, while the New Testament has, on an average, 12,044.13

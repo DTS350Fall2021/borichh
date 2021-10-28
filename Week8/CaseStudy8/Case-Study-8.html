@@ -297,9 +297,11 @@ head(Savior_Name) </code></pre>
 <pre class="r"><code>Savior_Ref(OldTest)</code></pre>
 <pre><code>## Warning in stri_length(string): argument is not an atomic vector; coercing</code></pre>
 <pre><code>## [1] 33187</code></pre>
+<p>33,187</p>
 <pre class="r"><code>Savior_Ref(NewTest)</code></pre>
 <pre><code>## Warning in stri_length(string): argument is not an atomic vector; coercing</code></pre>
 <pre><code>## [1] 44280</code></pre>
+<p>44,280</p>
 <pre class="r"><code>Between_Words &lt;- function(df, test) {
   for (names in Savior_Name$name) {
     Replace &lt;- str_replace_all(df, names, &quot;abcxyz&quot;)
@@ -316,18 +318,23 @@ head(Savior_Name) </code></pre>
 <pre><code>## Warning in stri_replace_all_regex(string, pattern,
 ## fix_replacement(replacement), : argument is not an atomic vector; coercing</code></pre>
 <pre><code>## [1] 611503</code></pre>
+<p>611,503</p>
 <pre class="r"><code>Between_Words(NewTest, &quot;between&quot;)</code></pre>
 <pre><code>## Warning in stri_replace_all_regex(string, pattern,
 ## fix_replacement(replacement), : argument is not an atomic vector; coercing</code></pre>
 <pre><code>## [1] 180662</code></pre>
+<p>180,662</p>
 <pre class="r"><code>Between_Words(OldTest, &quot;mean&quot;)</code></pre>
 <pre><code>## Warning in stri_replace_all_regex(string, pattern,
 ## fix_replacement(replacement), : argument is not an atomic vector; coercing</code></pre>
 <pre><code>## [1] 3135.913</code></pre>
+<p>3,135.913</p>
 <pre class="r"><code>Between_Words(NewTest, &quot;mean&quot;)</code></pre>
 <pre><code>## Warning in stri_replace_all_regex(string, pattern,
 ## fix_replacement(replacement), : argument is not an atomic vector; coercing</code></pre>
 <pre><code>## [1] 12044.13</code></pre>
+<p>12,044.13</p>
+<p>After doing extensive research, I was able to figure out that the New Testament has more references to a Savior name than the Old Testament does. The New Testament has a total of 44,280 references throughout the book while the Old Testament has a total of 33,187 mentioned of Savior references. Later on, I was able to find out that the Old Testament and the New Testament have varying lengths. I was able to conclude that from finding the average of length between each savior reference. The Old Testament has, on an average, 3,135 words in between each Savior reference, while the New Testament has, on an average, 12,044.13</p>
 
 
 
