@@ -190,21 +190,24 @@ str_detect(NewTest, "abcxyz")
 ```
 ## [1] FALSE
 ```
-
+Savior References Function
 
 ```r
 Savior_Ref <- function(df) {
   count <- vector("integer", ncol(Savior_Name))
   for (name in Savior_Name) {
     count <- count + str_length(str_extract_all(df, name))
+    names(count)
   }
-  sum(count)
+  count
 }
 ```
+How many times Savior was mentioned in:
 
+Old Testament
 
 ```r
-Savior_Ref(OldTest)
+sum(Savior_Ref(OldTest))
 ```
 
 ```
@@ -216,8 +219,10 @@ Savior_Ref(OldTest)
 ```
 33,187
 
+New Testament
+
 ```r
-Savior_Ref(NewTest)
+sum(Savior_Ref(NewTest))
 ```
 
 ```
@@ -228,6 +233,8 @@ Savior_Ref(NewTest)
 ## [1] 44280
 ```
 44,280
+
+Finding the words between each instances of a Savior reference
 
 ```r
 Between_Words <- function(df, test) {
@@ -243,7 +250,9 @@ Between_Words <- function(df, test) {
   }
 }
 ```
+How many words in between each instance:
 
+Old Testament
 
 ```r
 Between_Words(OldTest, "between")
@@ -259,6 +268,8 @@ Between_Words(OldTest, "between")
 ```
 611,503
 
+New Testament
+
 ```r
 Between_Words(NewTest, "between")
 ```
@@ -272,6 +283,10 @@ Between_Words(NewTest, "between")
 ## [1] 180662
 ```
 180,662
+
+The average amount of words between each instance:
+
+Old Testament
 
 ```r
 Between_Words(OldTest, "mean")
@@ -287,6 +302,8 @@ Between_Words(OldTest, "mean")
 ```
 3,135.913
 
+New Testament
+
 ```r
 Between_Words(NewTest, "mean")
 ```
@@ -300,6 +317,43 @@ Between_Words(NewTest, "mean")
 ## [1] 12044.13
 ```
 12,044.13
+
+```r
+as.data.frame(Savior_Ref(OldTest)) %>%
+  ggplot(aes(x = Savior_Ref(OldTest))) +
+    geom_histogram(color = "black", fill = "blue", binwidth = 75) +
+    labs(x = "Length Between Savior Names", y = "Frequency", title = "Old Testment Word Length Between Names") +
+    theme_bw()
+```
+
+```
+## Warning in stri_length(string): argument is not an atomic vector; coercing
+
+## Warning in stri_length(string): argument is not an atomic vector; coercing
+
+## Warning in stri_length(string): argument is not an atomic vector; coercing
+```
+
+![](Case-Study-8_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+
+```r
+as.data.frame(Savior_Ref(NewTest)) %>%
+  ggplot(aes(x = Savior_Ref(NewTest))) +
+    geom_histogram(color = "black",fill = "blue", binwidth = 100) +
+    labs(x = "Length Between Savior Names", y = "Frequency", title = "New Testment Word Length Between Names") +
+    theme_bw()
+```
+
+```
+## Warning in stri_length(string): argument is not an atomic vector; coercing
+
+## Warning in stri_length(string): argument is not an atomic vector; coercing
+
+## Warning in stri_length(string): argument is not an atomic vector; coercing
+```
+
+![](Case-Study-8_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
 
 After doing extensive research, I was able to figure out that the New Testament has more references to a Savior name than the Old Testament does. The New Testament has a total of 44,280 references throughout the book while the Old Testament has a total of 33,187 mentioned of Savior references. 
 Later on, I was able to find out that the Old Testament and the New Testament have varying lengths. I was able to conclude that from finding the average of length between each savior reference. The Old Testament has, on an average, 3,135 words in between each Savior reference, while the New Testament has, on an average, 12,044.13
