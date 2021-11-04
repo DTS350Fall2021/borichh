@@ -1,0 +1,118 @@
+---
+title: "CaseStudy9Markdown"
+author: "Haleigh Borich"
+date: "11/3/2021"
+output: 
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+```{r}
+library(tidyverse)
+library(lubridate)
+library(downloader)
+```
+
+```{r}
+bob1 <- tempfile()
+download("https://github.com/WJC-Data-Science/DTS350/raw/master/sales.csv", bob1, mode = "wb")
+SaleData <- read_csv(bob1)
+```
+
+```{r}
+SalesData <- with_tz(SaleData, tzone = "US/Mountain")
+```
+
+```{r}
+HourlyData <- SalesData %>%
+  mutate(hourly = ceiling_date(Time, "hour")) %>%
+  mutate(daily = ceiling_date(Time, "day")) %>%
+  mutate(Hour = hour(hourly)) %>%
+  group_by(Name, Hour) %>%
+  summarise(across(Amount, sum))
+```
+
+```{r}
+ggplot(HourlyData, aes(x = Hour, y = Amount, color = Name)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~ Name, nrow = 2) +
+  labs(x = "Hours throughout the Day",
+       y = "Amount of Sales a Day",
+       title = "Creating Recomended Hours of Operations") +
+  theme_bw()
+```
+
+```{r}
+DailyData <- SalesData %>%
+  mutate(daily = ceiling_date(Time, "day")) %>%
+  mutate(Daily = wday(daily)) %>%
+  group_by(Name, Daily) %>%
+  summarise(across(Amount, sum))
+```
+
+```{r}
+ggplot(DailyData, aes(x = Daily, y = Amount, color = Name)) +
+   geom_point() +
+   geom_line() +
+   facet_wrap(~ Name, nrow = 2) +
+  labs(x = "Days of the Week",
+       y = "Amount of Sales total",
+       tital = "Daily Gross Revenue ") +
+   theme_bw()
+```
+
+```{r}
+WeeklyData <- SalesData %>%
+   mutate(weekly = ceiling_date(Time, "week")) %>%
+   mutate(Weekly = week(weekly)) %>%
+   group_by(Name, Weekly) %>%
+   summarise(across(Amount, sum))
+```
+
+```{r}
+ggplot(WeeklyData, aes(x = Weekly, y = Amount, color = Name)) +
+   geom_point() +
+   geom_line() +
+   facet_wrap(~ Name, nrow = 2) +
+  labs(x = "The Weeks in the 3 Month Period",
+       y = "Amount of Total Sales",
+       title = "Weekly Gross Profit") +
+   theme_bw()
+```
+
+```{r}
+MonthlyData <- SalesData %>%
+   mutate(monthly = ceiling_date(Time, "month")) %>%
+   mutate(Monthly = month(monthly)) %>%
+   group_by(Name, Monthly) %>%
+   summarise(across(Amount, sum))
+```
+
+```{r}
+ggplot(MonthlyData, aes(x = Monthly, y = Amount, color = Name)) +
+   geom_point() +
+   geom_line() +
+   facet_wrap(~ Name, nrow = 2) +
+  labs(x = "May through August Sales",
+       y = "Total Amount of Sales",
+       tite = "Gross Revenue for 3 Months ") +
+   theme_bw()
+```
+
+```{r}
+TotalData <- SalesData %>%
+  group_by(Name) %>%
+  summarise(across(Amount, sum))
+```
+
+```{r}
+ggplot(TotalData, aes(x = Name, y = Amount, fill = Name)) +
+  geom_col() +
+  labs(x = "Company Names",
+       y = "Total Amount of Sales",
+       title = "Comparison between the 6 Companies") +
+  theme_bw()
+```
+
