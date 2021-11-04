@@ -99,7 +99,7 @@ ggplot(HourlyData, aes(x = Hour, y = Amount, color = Name)) +
 ```
 
 ![](CaseStudy9Markdown_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
-
+My recomendation for store hours is from 9am through 10pm. It seems as though sales start around 8:30am to 9am for the majority of the stores and end around 10pm most days.
 
 ```r
 DailyData <- SalesData %>%
@@ -126,7 +126,7 @@ ggplot(DailyData, aes(x = Daily, y = Amount, color = Name)) +
 ```
 
 ![](CaseStudy9Markdown_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
-
+If the days of the week are starting from Sunday as a 0 and Monday as a 1, then it is very clear that Friday and Saturday are the days we recieve the most sales. 
 
 ```r
 WeeklyData <- SalesData %>%
@@ -153,7 +153,7 @@ ggplot(WeeklyData, aes(x = Weekly, y = Amount, color = Name)) +
 ```
 
 ![](CaseStudy9Markdown_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
-
+When we are looking at the Weekly Gross Profit, we can see that it flutuactes over time. There is not one business that has a steady flow of sales. 
 
 ```r
 MonthlyData <- SalesData %>%
@@ -180,7 +180,7 @@ ggplot(MonthlyData, aes(x = Monthly, y = Amount, color = Name)) +
 ```
 
 ![](CaseStudy9Markdown_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
-
+While we are looking at the three month data, we can see that Hot Diggity has the most sales by far but LaBelle is close behind them.
 
 ```r
 TotalData <- SalesData %>%
@@ -199,4 +199,4 @@ ggplot(TotalData, aes(x = Name, y = Amount, fill = Name)) +
 ```
 
 ![](CaseStudy9Markdown_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
-
+It is very clear after looking at this graph that Hot Diggity is the company to invest in, however, Le Belle is very close behind and would be another best option to invest in.

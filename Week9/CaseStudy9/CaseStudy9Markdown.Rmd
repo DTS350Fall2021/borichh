@@ -43,7 +43,7 @@ ggplot(HourlyData, aes(x = Hour, y = Amount, color = Name)) +
        title = "Creating Recomended Hours of Operations") +
   theme_bw()
 ```
-
+My recomendation for store hours is from 9am through 10pm. It seems as though sales start around 8:30am to 9am for the majority of the stores and end around 10pm most days.
 ```{r}
 DailyData <- SalesData %>%
   mutate(daily = ceiling_date(Time, "day")) %>%
@@ -62,7 +62,7 @@ ggplot(DailyData, aes(x = Daily, y = Amount, color = Name)) +
        tital = "Daily Gross Revenue ") +
    theme_bw()
 ```
-
+If the days of the week are starting from Sunday as a 0 and Monday as a 1, then it is very clear that Friday and Saturday are the days we recieve the most sales. 
 ```{r}
 WeeklyData <- SalesData %>%
    mutate(weekly = ceiling_date(Time, "week")) %>%
@@ -81,7 +81,7 @@ ggplot(WeeklyData, aes(x = Weekly, y = Amount, color = Name)) +
        title = "Weekly Gross Profit") +
    theme_bw()
 ```
-
+When we are looking at the Weekly Gross Profit, we can see that it flutuactes over time. There is not one business that has a steady flow of sales. 
 ```{r}
 MonthlyData <- SalesData %>%
    mutate(monthly = ceiling_date(Time, "month")) %>%
@@ -100,7 +100,7 @@ ggplot(MonthlyData, aes(x = Monthly, y = Amount, color = Name)) +
        tite = "Gross Revenue for 3 Months ") +
    theme_bw()
 ```
-
+While we are looking at the three month data, we can see that Hot Diggity has the most sales by far but LaBelle is close behind them.
 ```{r}
 TotalData <- SalesData %>%
   group_by(Name) %>%
@@ -115,4 +115,4 @@ ggplot(TotalData, aes(x = Name, y = Amount, fill = Name)) +
        title = "Comparison between the 6 Companies") +
   theme_bw()
 ```
-
+It is very clear after looking at this graph that Hot Diggity is the company to invest in, however, Le Belle is very close behind and would be another best option to invest in.
