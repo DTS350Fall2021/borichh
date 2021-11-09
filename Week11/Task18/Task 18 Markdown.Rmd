@@ -1,0 +1,65 @@
+---
+title: "Task 18"
+author: "Haleigh Borich"
+date: "11/7/2021"
+output:  
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+I chose to look at the stock prices for American Airlines (AAL), T-Mobile (TMUS), and Microsoft Corp (MSFT). My friends chose Kellogg Company (K), AMC Entertainment (AMC), and Walt Disney Co (DIS)
+
+```{r}
+library(tidyquant)
+library(tidyverse)
+library(lubridate)
+library(timetk)
+library(dygraphs)
+```
+Setting the Time Frame
+```{r}
+start <- today() - years(1)
+  end <- today()
+```
+
+My Picks
+```{r}
+(AmericanAir <- tq_get("AAl", get = "stock.prices", from = start, to = end))
+(Tmobile <- tq_get("TMUS", get = "stock.prices", from = start, to = end))
+(Mircosoft <- tq_get("MSFT", get = "stock.prices", from = start, to = end))
+```
+Friend's Picks
+```{r}
+(Kellogg <- tq_get("K", get = "stock.prices", from = start, to = end))
+(AMC <- tq_get("AMC", get = "stock.prices",from = start, to = end))
+(Disney <- tq_get("DIS", get = "stock.prices", from = start, to = end))
+```
+Combining them all together
+```{r}
+total <- tq_get(c("AAL", "TMUS", "MSFT", "K", "AMC", "DIS"), get = "stock.prices", from = start, to = end)
+
+head(total)
+tail(total)
+```
+
+```{r}
+total_xts <- total %>%
+  select(symbol, date, adjusted) %>%
+  pivot_wider(names_from = symbol, values_from = adjusted) %>%
+  tk_xts(date_var = date)
+
+dygraph(total_xts)
+```
+After looking at this graph, it is clear the Microsoft has the highest stock prices out of the chosen six to examine. Because of that, I will be just looking at the Microsoft stocks to see which stock is helping them be so successful.
+```{r}
+total %>%
+  filter(symbol == "MSFT") %>%
+  ggplot(aes(x = date, y = adjusted)) +
+  geom_candlestick(aes(open = open, high = high, low = low, close = close)) +
+  labs(title = "Candlestick Chart", 
+       y = "Closing Price", x = "") + 
+  coord_x_date(xlim = c(start, end)) +
+  theme_tq()
+```
+With the candlestick chart, I can see that Microsoft has had a steady growth since June 2021 with a slight dip in September 2021. When Microsoft hit their slight dip, it was mainly because their closing price was lower than the opening price. 
