@@ -1,0 +1,64 @@
+---
+title: "Case Study 10"
+author: "Haleigh Borich"
+date: "11/8/2021"
+output:  
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+
+```{r}
+start <- today() - years(5)
+  end <- today()
+```
+
+```{r}
+tickers_today <- c("CXW", "F", "GM", "KR", "WDC", "NKE","T", "WDAY", "WFC", "WMT")
+
+total <- tq_get(tickers_today, get = "stock.prices", from = start, to = end)
+```
+
+```{r}
+tickers_xts <- total %>%
+  select(symbol, date, adjusted) %>%
+  pivot_wider(names_from = symbol, values_from = adjusted) %>%
+  tk_xts(date_var = date)
+
+dygraph(tickers_xts)
+```
+
+```{r}
+codes <- c("CXW", "F", "GM", "KR", "WDC", "NKE","T", "WDAY", "WFC", "WMT")
+
+
+calculator <- function(stock_tickers) {
+  total <- tq_get(stock_tickers, get = "stock.prices", from = start, to = end)
+  charty <- total %>%
+    select(symbol, date, adjusted) %>%
+    pivot_wider(names_from = symbol, values_from = adjusted) %>%
+    tk_xts(date_var = date)
+  dygraph(charty)
+}
+
+calculator(codes)
+```
+I chose to do an interactive time graph for my first graph that way we can make an informed decision on where to invest since we can compare each stock code over the last five years. In the more recent years, there has been an increase with stocks due to it gaining popularity on Social Media. We can see this in the year 2020 because of the rise of stock prices. 
+```{r}
+codes2 <- c("CXW", "F", "GM", "KR", "WDC", "NKE","T", "WDAY", "WFC", "WMT")
+
+calculator2 <- function(stock_tickers2) {
+  total2 <- tq_get(stock_tickers2, get = "stock.prices", from = start, to = end)
+  charty2 <- total2 %>%
+    ggplot(aes(x = date, y = volume, color = symbol)) +
+    geom_line() +
+    labs(title = "Volume over the last 5 Years", y = " ", x = "") +
+    facet_wrap(~symbol, scales = "free_y") +
+    theme_tq()
+  charty2
+}
+
+calculator2(codes2)
+```
+
