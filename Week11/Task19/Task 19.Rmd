@@ -1,0 +1,99 @@
+---
+title: "Task 19"
+author: "Haleigh Borich"
+date: "11/10/2021"
+output:   
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(downloader)
+```
+
+```{r}
+bob <- tempfile()
+download("https://www.bls.gov/cps/womens-earnings-tables-2020.xlsx", bob, mode = "wb")
+Data1 <- read_xlsx(bob, skip = 3)
+head(Data1)
+str(Data1)
+```
+
+```{r}
+view(Data1)
+```
+
+```{r}
+colnames(Data1)[1] <- "Age"
+colnames(Data1)[2] <- "TotalNumberofWorkers"
+colnames(Data1)[3] <- "TotalMedianWeeklyEarnings"
+colnames(Data1)[4] <- "TotalStandardErrorofMedian"
+colnames(Data1)[5] <- "WomensNumberofWorkers"
+colnames(Data1)[6] <- "WomensMedianWeeklyEarnings"
+colnames(Data1)[7] <- "WomensStandardErrorofMedian"
+colnames(Data1)[8] <- "MensNumberofWorkers"
+colnames(Data1)[9] <- "MensMedianWeeklyEarnings"
+colnames(Data1)[10] <- "MensStandardErrorofMedian"
+colnames(Data1)[11] <- "WomensEarningsAsPercentageOfMens"
+```
+
+```{r}
+view(Data1)
+```
+
+```{r}
+AgeData <- Data1 %>%
+  slice(3:12)
+
+view(AgeData)
+```
+
+```{r}
+ggplot(AgeData, aes(x = Age, y = WomensMedianWeeklyEarnings)) +
+  geom_col(fill = "black") +
+  labs(x = "Age Groups",
+       y = " ", 
+       title = "Median for Women's Weekly Earnings") +
+  theme_bw()
+```
+
+```{r}
+ggplot(AgeData, aes(x = Age, y = MensMedianWeeklyEarnings)) +
+  geom_col(fill = "black") +
+  labs(x = "Age Groups",
+       y = " ", 
+       title = "Median for Men's Weekly Earnings") +
+  theme_bw()
+```
+From these graphs comparing Men's and Women's weekly average of salary for age group, we can see that Men clearly have a higher weekly average than women do. While the trend line may be the same, we can see that on the Y Axis the Men's grouping has a higher overall average. 
+
+From this graph, I was am to form a new question that will further my exploration of the data. If we were to separate the men and womens categories further into race and education, will we see the same results?
+
+In order to answer these new questions, I will need to look specifucally at the race data and the education data. I would even like to go further and compare gender as well. 
+
+I do not beleive there are any limitations from the data itself, the only limitation I can foresee occuring is that I do not have an adequate experience with tidying data just yet and may not be able to follow through with the data exploration without help. 
+```{r}
+RaceData <- Data1 %>%
+  slice(15:18)
+
+view(RaceData)
+```
+
+```{r}
+MaritalData <- Data1 %>%
+  slice(21:26)
+
+view(MaritalData)
+```
+
+```{r}
+EducationData <- Data1 %>%
+  slice(34:38)
+
+view(EducationData)
+```
+
