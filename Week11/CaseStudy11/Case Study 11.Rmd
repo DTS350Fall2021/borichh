@@ -1,0 +1,64 @@
+---
+title: "Case Study 11"
+author: "Haleigh Borich"
+date: "11/15/2021"
+output:   
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+```{r}
+library(tidyverse)
+library(USAboundaries)
+library(sf)
+library(ggrepel)
+library(lwgeom)
+library(maps)
+library(downloader)
+```
+
+```{r}
+data <- tempfile()
+download("https://raw.githubusercontent.com/WJC-Data-Science/DTS350/master/permits.csv", data, mode = "wb")
+permits <- read_csv(data)
+```
+
+```{r}
+view(permits)
+view(state_codes)
+```
+
+```{r}
+clean_codes <- state_codes %>%
+  mutate(state = as.integer(state_code))
+```
+
+
+```{r}
+total <- merge(permits, clean_codes, by = "state") %>%
+  group_by(state_name, year) %>%
+  summarise(across(value, sum))
+```
+
+```{r}
+ggplot(data = total, aes(x = year, y = value/1000, color = state_name)) +
+    geom_point() +
+    geom_line() +
+    geom_vline(xintercept = 2008, linetype = 'dotted') +
+    labs(x = '', y = 'Number of Permits (per 1000)', title = 'Permits per State') +
+    theme_bw()
+```
+
+```{r}
+total %>%
+  filter(state_name == 'Missouri') %>%
+  ggplot(aes(x = year, y = value/1000)) +
+    geom_point() +
+    geom_line() +
+    geom_vline(xintercept = 2008, linetype = 'dotted') +
+    labs(x = '', y = 'Number of Permits(per 1000)', title = 'Permits in Missouri') +
+    theme_bw() +
+    theme(legend.position = 'none')
+```
+
