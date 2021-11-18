@@ -1,0 +1,73 @@
+---
+title: "Task 24"
+author: "Haleigh Borich"
+date: "11/16/2021"
+output:    
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+```{r}
+library(leaflet)
+library(tidyverse)
+library(sf)
+library(USAboundaries)
+library(ggrepel)
+library(lwgeom)
+library(maps)
+library(readr)
+```
+
+```{r}
+install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev", type = "source")
+```
+
+```{r}
+idaho <- us_counties(states = "ID")
+
+cities <- us_cities()
+
+states <- us_cities()
+```
+
+```{r}
+top_three <- states %>%
+  filter(state_name != "Alaska", 
+         state_name != "Hawaii") %>%
+  group_by(state_name) %>%
+  arrange(desc(population)) %>%
+  slice(1:3)
+```
+
+```{r}
+top_one <- top_three %>%
+  slice(1:1)
+
+num_two <- top_three %>%
+  slice(2:2)
+
+num_three <- top_three %>%
+  slice(3:3)
+```
+
+```{r}
+states <- read_csv("https://github.com/WJC-Data-Science/DTS350/raw/master/states.csv", col_names = FALSE)
+head(states)
+```
+
+```{r}
+statesLatLng <- transmute(states, X1, Lat = X2, Long = X3)
+```
+
+```{r}
+
+```
+
+
+```{r}
+states1 <-  mutate(statesLatLng, quality = case_when(
+  X1 == 
+))
+```
+
