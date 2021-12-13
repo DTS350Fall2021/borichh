@@ -1,0 +1,266 @@
+---
+title: "Semester Project"
+author: "Haleigh Borich"
+date: "11/10/2021"
+output:   
+  html_document:
+    theme: united
+    keep_md: True
+    code_folding: 'hide'
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(downloader)
+```
+
+```{r}
+bob <- tempfile()
+download("https://www.bls.gov/cps/womens-earnings-tables-2020.xlsx", bob, mode = "wb")
+Data1 <- read_xlsx(bob, skip = 3)
+head(Data1)
+str(Data1)
+```
+
+```{r}
+view(Data1)
+```
+
+```{r}
+colnames(Data1)[1] <- "Age"
+colnames(Data1)[2] <- "TotalNumberofWorkers"
+colnames(Data1)[3] <- "TotalMedianWeeklyEarnings"
+colnames(Data1)[4] <- "TotalStandardErrorofMedian"
+colnames(Data1)[5] <- "WomensNumberofWorkers"
+colnames(Data1)[6] <- "WomensMedianWeeklyEarnings"
+colnames(Data1)[7] <- "WomensStandardErrorofMedian"
+colnames(Data1)[8] <- "MensNumberofWorkers"
+colnames(Data1)[9] <- "MensMedianWeeklyEarnings"
+colnames(Data1)[10] <- "MensStandardErrorofMedian"
+colnames(Data1)[11] <- "WomensEarningsAsPercentageOfMens"
+```
+
+```{r}
+view(Data1)
+```
+
+```{r}
+AgeData <- Data1 %>%
+  slice(3:12)
+
+view(AgeData)
+```
+
+```{r}
+Wage <- ggplot(AgeData, aes(x = Age, y = WomensMedianWeeklyEarnings)) +
+  geom_col(fill = "white") +
+  labs(x = "Age Groups",
+       y = " ", 
+       title = "Median for Women's Weekly Earnings") +
+  theme_dark()
+```
+
+```{r}
+Mage <- ggplot(AgeData, aes(x = Age, y = MensMedianWeeklyEarnings)) +
+  geom_col(fill = "white") +
+  labs(x = "Age Groups",
+       y = " ", 
+       title = "Median for Men's Weekly Earnings") +
+  theme_dark()
+```
+
+```{r}
+plot_grid(Wage, Mage)
+```
+
+
+From these graphs comparing Men's and Women's weekly average of salary for age group, we can see that Men clearly have a higher weekly average than women do. While the trend line may be the same, we can see that on the Y Axis the Men's grouping has a higher overall average. 
+
+From this graph, I was am to form a new question that will further my exploration of the data. If we were to separate the men and womens categories further into race and education, will we see the same results?
+
+In order to answer these new questions, I will need to look specifucally at the race data and the education data. I would even like to go further and compare gender as well. 
+
+I do not beleive there are any limitations from the data itself, the only limitation I can foresee occuring is that I do not have an adequate experience with tidying data just yet and may not be able to follow through with the data exploration without help. 
+```{r}
+RaceData <- Data1 %>%
+  slice(15:18)
+
+colnames(RaceData)[1] <- "Race"
+
+view(RaceData)
+```
+
+```{r}
+Wrace <- ggplot(RaceData, aes(x = Race, y = WomensMedianWeeklyEarnings)) +
+  geom_col(fill = "white") +
+  labs(x = "Race",
+       y = " ", 
+       title = "Median for Women's Weekly Earnings through Race") +
+  theme_dark()
+```
+
+```{r}
+Mrace <- ggplot(RaceData, aes(x = Race, y = MensMedianWeeklyEarnings)) +
+  geom_col(fill = "white") +
+  labs(x = "Race",
+       y = " ", 
+       title = "Median for Men's Weekly Earnings through Race") +
+  theme_dark()
+```
+
+```{r}
+plot_grid(Wrace, Mrace)
+```
+
+
+```{r}
+MaritalData <- Data1 %>%
+  slice(21:26)
+
+colnames(MaritalData)[1] <- "MarriedGroups"
+
+view(MaritalData)
+```
+
+```{r}
+Wmarry <- ggplot(MaritalData, aes(x = MarriedGroups, y = WomensMedianWeeklyEarnings)) +
+  geom_col(fill = "white") +
+  labs(x = "Marital Staus",
+       y = " ", 
+       title = "Median for Women's Weekly Earnings through Marital Status") +
+  theme_dark()
+```
+
+```{r}
+Mmarry <- ggplot(MaritalData, aes(x = MarriedGroups, y = MensMedianWeeklyEarnings)) +
+  geom_col(fill = "white") +
+  labs(x = "Marital Status",
+       y = " ", 
+       title = "Median for Men's Weekly Earnings through Marital Status") +
+  theme_dark()
+```
+
+```{r}
+plot_grid(Wmarry, Mmarry)
+```
+
+```{r}
+EducationData <- Data1 %>%
+  slice(35:38)
+
+colnames(EducationData)[1] <- "Education"
+
+view(EducationData)
+```
+
+```{r}
+Wedu <- ggplot(EducationData, aes(x = Education, y = WomensMedianWeeklyEarnings)) +
+  geom_col(fill = "white") +
+  labs(x = "Highest Level of Education Received",
+       y = " ", 
+       title = "Median for Women's Weekly Earnings through Education") +
+  theme_dark()
+```
+
+```{r}
+Medu <- ggplot(EducationData, aes(x = Education, y = MensMedianWeeklyEarnings)) +
+  geom_col(fill = "white") +
+  labs(x = "Highest Level of Education Received",
+       y = " ", 
+       title = "Median for Men's Weekly Earnings through Education") +
+  theme_dark()
+```
+
+```{r}
+plot_grid(Wedu, Medu)
+```
+```{r}
+Data2 <- read_excel("Race-Earnings-2020-Adjusted.xlsx")
+view(Data2)
+```
+
+```{r}
+Data2 %>%
+  drop_na()
+
+```
+
+
+```{r}
+WhiteWomen <- ggplot(Data2, aes(x = Year, y = White)) +
+  geom_line(color = "blue") +
+  theme_bw()
+
+AfricanAmeriWomen <- ggplot(Data2, aes(x = Year, y = AfricanAmerican)) +
+  geom_line(color = "red") +
+  theme_bw()
+
+AsianWomen <- ggplot(Data2, aes(x = Year, y = Asian)) +
+  geom_line(color = "purple") +
+  theme_bw()
+
+HispanicWomen <- ggplot(Data2, aes(x = Year, y = Hispanic)) +
+  geom_line(color = "orange") +
+  theme_bw()
+```
+
+```{r}
+plot_grid(WhiteWomen, AfricanAmeriWomen, AsianWomen, HispanicWomen)
+```
+
+```{r}
+Data3 <- read_excel("Womens-Weekly-Earnings.xlsx")
+view(Data3)
+Data4 <- read_excel("Mens-Weekly-Earnings.xlsx")
+view(Data4)
+```
+
+```{r}
+WomenWhiteWeekly <- ggplot(Data3, aes(x = Women, y = White)) +
+  geom_line(color = "blue") +
+  theme_bw()
+
+WomenAfricanAmeriWeekly <- ggplot(Data3, aes(x = Women, y = AfricanAmerican)) +
+  geom_line(color = "red") +
+  theme_bw()
+
+WomenAsianWeekly <- ggplot(Data3, aes(x = Women, y = Asian)) +
+  geom_line(color = "purple") +
+  theme_bw()
+
+WomenHispanicWeekly <- ggplot(Data3, aes(x = Women, y = Hispanic)) +
+  geom_line(color = "orange") +
+  theme_bw()
+```
+
+```{r}
+womenweeklypay <- plot_grid(WomenWhiteWeekly, WomenAfricanAmeriWeekly, WomenAsianWeekly, WomenHispanicWeekly)
+```
+
+```{r}
+MenWhiteWeekly <- ggplot(Data4, aes(x = Men, y = White)) +
+  geom_line(color = "blue") +
+  theme_bw()
+
+MenAfricanAmeriWeekly <- ggplot(Data4, aes(x = Men, y = AfricanAmerican)) +
+  geom_line(color = "red") +
+  theme_bw()
+
+MenAsianWeekly <- ggplot(Data4, aes(x = Men, y = Asian)) +
+  geom_line(color = "purple") +
+  theme_bw()
+
+MenHispanicWeekly <- ggplot(Data4, aes(x = Men, y = Hispanic)) +
+  geom_line(color = "orange") +
+  theme_bw()
+```
+
+```{r}
+menweeklypay <- plot_grid(MenWhiteWeekly, MenAfricanAmeriWeekly, MenAsianWeekly, MenHispanicWeekly)
+```
+
+```{r}
+plot_grid(WomenWhiteWeekly, MenWhiteWeekly, WomenAfricanAmeriWeekly, MenAfricanAmeriWeekly,WomenAsianWeekly, MenAsianWeekly, WomenHispanicWeekly, MenHispanicWeekly)
+```
+
